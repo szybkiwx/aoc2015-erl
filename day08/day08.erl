@@ -1,13 +1,30 @@
 -module(day08).
--export([part1/1]).
+-export([part1/1, part2/1]).
 
 part1(FileName) ->
+
+	process_file(FileName, fun(Line) -> Line end).
+
+part2(FileName) ->
+
+	process_file(FileName, fun encode_line/1).
+
+process_file(FileName, PreProcessLine) ->
 	{ok, Bin} = file:read_file(FileName),
 	Lines = binary:split(Bin, <<"\n">>, [global, trim_all]),
-	Sums = [count_chars_full(Line) || Line <- Lines],
+	Sums = [count_chars_full(PreProcessLine(Line)) || Line <- Lines],
 	[io:format("~p - ~p\n", [All, Chars]) || {All, Chars} <- Sums],
 
 	lists:sum([All - Chars || {All, Chars} <- Sums]).
+
+encode_line(Line) -> 
+	EncodedLine = encode_char(Line, <<>>),
+	<<$", EncodedLine/binary, $">>.
+
+encode_char(<<$", Rest/binary>>, Result) -> encode_char(Rest, <<Result/binary, $\\, $">>);
+encode_char(<<$\\, Rest/binary>>, Result) -> encode_char(Rest, <<Result/binary, $\\, $\\>>);
+encode_char(<<C, Rest/binary>>, Result) -> encode_char(Rest, <<Result/binary, C>>);
+encode_char(<<>>, Result) -> Result.
 	
 count_chars_full(FullLine) ->
 	FullSize = byte_size(FullLine),
