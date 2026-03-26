@@ -1,10 +1,15 @@
 -module(day10).
--export([part1/1, test/1]).
+-export([part1/1, part2/1, test/1]).
 
 part1(Input) ->
 	Digits = [X - $0 || X <- Input],
-	
 	iterate(40, Digits).
+
+part2(Input) ->
+	Digits = [X - $0 || X <- Input],
+	iterate(50, Digits).
+
+
 	
 test(Input) ->
 	[H|Rest] = [X - $0 || X <-Input],
