@@ -1,8 +1,10 @@
 -module(day11).
--export([part1/1, is_password_valid/1, has_two_pairs/1, has_increasing/1, has_valid_letters/1, find_valid_next/1]).
+-export([part1/1, part2/1]).
 part1(Input) ->
 	find_valid_next(Input).
 
+part2(Input) ->
+	part1(increment_password(part1(Input))).
 
 find_valid_next(Password) ->
 	case is_password_valid(Password) of 
